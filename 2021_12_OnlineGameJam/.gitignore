@@ -4,7 +4,6 @@
 Assets/Plugins
 Assets/Photon
 ProjectSettings/
-*.meta
 
 *.log
 Logs/
