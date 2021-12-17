@@ -230,8 +230,8 @@ MonoBehaviour:
   m_text: "A- \uC67C\uCABD\uC73C\uB85C \uC774\uB3D9\nD- \uC624\uB978\uCABD\uC73C\uB85C
     \uC774\uB3D9\nSPACE- \uC810\uD504"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2226f0288f3749145ad48c2280bb654c, type: 2}
-  m_sharedMaterial: {fileID: -6845788918470288941, guid: 2226f0288f3749145ad48c2280bb654c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 26fe2ddb9f0aadf42826873f45c8e434, type: 2}
+  m_sharedMaterial: {fileID: -6845788918470288941, guid: 26fe2ddb9f0aadf42826873f45c8e434, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -319,7 +319,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6845788918470288941, guid: 2226f0288f3749145ad48c2280bb654c, type: 2}
+  - {fileID: -6845788918470288941, guid: 26fe2ddb9f0aadf42826873f45c8e434, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
