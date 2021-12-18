@@ -45,7 +45,7 @@ public class SoundManager : MonoBehaviour
                 instance = gameObject.AddComponent<SoundManager>();
                 instance.bgmSource = gameObject.AddComponent<AudioSource>();
                 instance.sfxSource = gameObject.AddComponent<AudioSource>();
-                instance.bgmSource.volume = 0.25f;
+                instance.bgmSource.volume = 0.15f;
                 instance.sfxSource.volume = 0.25f;
 
                 instance.bgmClips = Resources.LoadAll<AudioClip>(BGM_PATH).ToDictionary(p => p.name);

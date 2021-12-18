@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
 
     public PlayerGauge playerGauge;
 
+    public float maxPressTime = 1f;
+
 
     public event Action<float, float> OnGroundFall;
     public event Action<float> OnJump;
@@ -166,8 +168,8 @@ public class Player : MonoBehaviour
             
             isCharging = false;
             var pressTime = Time.time - chargeTime;
-            var chargeForce = pressTime > 2 ? 2 : pressTime;
-            var power = animationCurve.Evaluate(chargeForce / 2.0f);
+            var chargeForce = pressTime > maxPressTime ? maxPressTime : pressTime;
+            var power = animationCurve.Evaluate(chargeForce / maxPressTime);
             playerGauge.SetFill(power);
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
@@ -190,8 +192,8 @@ public class Player : MonoBehaviour
     void ShowCharge()
 	{
         float pressTime = Time.time - chargeTime;
-        float chargeForce = pressTime > 2 ? 2 : pressTime;
-        float power = animationCurve.Evaluate(chargeForce / 2.0f);
+        float chargeForce = pressTime > maxPressTime ? maxPressTime : pressTime;
+        float power = animationCurve.Evaluate(chargeForce / maxPressTime);
         playerGauge.SetFill(power);
     }
 
