@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     private readonly Vector3 _leftDirection = new Vector3(-0.5f, 1, 0);
     private Vector3 _jumpDirection;
     
+    [SerializeField] private Animator playerAnimator;
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private Rigidbody2D playerRigidbody;
@@ -92,6 +93,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(LeftKeyCode))
         {
+            playerAnimator.SetBool("Move", true);
             if (!isCharging)
             {
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
@@ -104,6 +106,7 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKey(RightKeyCode))
         {
+            playerAnimator.SetBool("Move", true);
             if (!isCharging)
             {
                 transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
@@ -112,6 +115,11 @@ public class Player : MonoBehaviour
                 return;
             }
             _jumpDirection = _rightDirection;
+        }
+        else
+        {
+
+            playerAnimator.SetBool("Move", false);
         }
     }
 
@@ -145,6 +153,7 @@ public class Player : MonoBehaviour
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
+            playerAnimator.SetTrigger("Jump");
         }
         else
         {
@@ -152,6 +161,8 @@ public class Player : MonoBehaviour
             _jumpDirection = Vector3.up;
             chargeTime = Time.time;
             isCharging = true;
+
+            playerAnimator.SetTrigger("Charging");
         }
     }
 
