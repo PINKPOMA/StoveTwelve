@@ -32843,11 +32843,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7262814925690809052, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
   m_PrefabInstance: {fileID: 7262814924157016991}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1694265668 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8870145391728486198, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
-  m_PrefabInstance: {fileID: 7262814924157016991}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1699227894
 GameObject:
   m_ObjectHideFlags: 0
@@ -33207,14 +33202,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7262814925690808992, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
-      propertyPath: jumpForce
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 7262814925690808992, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
-      propertyPath: playerAnimator
-      value: 
-      objectReference: {fileID: 1694265668}
     - target: {fileID: 7262814925690808993, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
       propertyPath: m_Name
       value: Player (2)
@@ -33262,14 +33249,6 @@ PrefabInstance:
     - target: {fileID: 7262814925690809052, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7262814925690809055, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
-      propertyPath: m_SleepingMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7262814925690809055, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
