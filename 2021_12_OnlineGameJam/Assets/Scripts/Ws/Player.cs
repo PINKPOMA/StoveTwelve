@@ -121,15 +121,17 @@ public class Player : MonoBehaviour
         if (Input.GetKey(LeftKeyCode))
         {
             _jumpDirection = _leftDirection;
+            playerSpriteRenderer.flipX = true;
         }
         else if (Input.GetKey(RightKeyCode))
         {
             _jumpDirection = _rightDirection;
+            playerSpriteRenderer.flipX = false;
         }
-        else
-        {
-            _jumpDirection = Vector3.up;
-        }
+        // else
+        // {
+        //    _jumpDirection = Vector3.up;
+        // }
     }
     
     private void Jump()
@@ -152,6 +154,7 @@ public class Player : MonoBehaviour
             if (!Input.GetKey(JumpKeyCode)) return;
             _jumpDirection = Vector3.up;
             chargeTime = Time.time;
+            _jumpDirection = playerSpriteRenderer.flipX ? _leftDirection : _rightDirection;
             isCharging = true;
         }
     }
