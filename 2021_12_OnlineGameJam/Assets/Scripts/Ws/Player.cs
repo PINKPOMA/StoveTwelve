@@ -6,17 +6,19 @@ using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
+    private const KeyCode LeftKeyCode = KeyCode.A;
+    private const KeyCode RightKeyCode = KeyCode.D;
+    private const KeyCode JumpKeyCode = KeyCode.Space;
     private readonly Vector3 _rightDirection = new Vector3(0.5f, 1, 0);
     private readonly Vector3 _leftDirection = new Vector3(-0.5f, 1, 0);
     private Vector3 _jumpDirection;
     
+    [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private Rigidbody2D playerRigidbody;
-    [SerializeField] private float playerBounciness = 0.1f;
     [SerializeField] private float groundCheckDistance = 0.1f;
     [SerializeField] private float defaultGravityScale = 1.5f;
     [SerializeField] private float fallingGravityScale = 9.8f;
-
     [SerializeField] private float playerWidth;
     [SerializeField] private float playerHeight;
     [SerializeField] private float jumpForce;
@@ -24,7 +26,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float chargeTime;
     [SerializeField] private bool isCharging;
     [SerializeField] private bool isGround;
-    [SerializeField] private AnimationCurve animationCurve;
+
     
     private void Start()
     {
@@ -38,6 +40,10 @@ public class Player : MonoBehaviour
         CheckGround();
         SetPlayerPhysics();
         Jump();
+    }
+
+    private void FixedUpdate()
+    {
         Move();
     }
 
@@ -59,6 +65,7 @@ public class Player : MonoBehaviour
                 if (!currentStatus)
                 {
                     SoundManager.Instance.PlaySFX("Fall");
+                    print("Fall Effect");
                 }
 
                 break;
@@ -83,22 +90,24 @@ public class Player : MonoBehaviour
             SetJumpDirection();
             return;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(LeftKeyCode))
         {
             if (!isCharging)
             {
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
+                // playerRigidbody.velocity = new Vector2(-moveSpeed, playerRigidbody.velocity.y);
                 playerSpriteRenderer.flipX = true;
                 return;
 
             }
             _jumpDirection = _leftDirection;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(RightKeyCode))
         {
             if (!isCharging)
             {
                 transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+                // playerRigidbody.velocity = new Vector2(moveSpeed, playerRigidbody.velocity.y);
                 playerSpriteRenderer.flipX = false;
                 return;
             }
@@ -108,11 +117,11 @@ public class Player : MonoBehaviour
 
     private void SetJumpDirection()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(LeftKeyCode))
         {
             _jumpDirection = _leftDirection;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(RightKeyCode))
         {
             _jumpDirection = _rightDirection;
         }
@@ -128,18 +137,18 @@ public class Player : MonoBehaviour
 
         if (isCharging)
         {
-            if (!Input.GetKeyUp(KeyCode.Space)) return;
+            if (!Input.GetKeyUp(JumpKeyCode)) return;
             isCharging = false;
             var pressTime = Time.time - chargeTime;
             var chargeForce = pressTime > 2 ? 2 : pressTime;
             var power = animationCurve.Evaluate(chargeForce / 2.0f);
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
-            SoundManager.Instance.PlaySFX("Jump");
+            if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
         }
         else
         {
-            if (!Input.GetKey(KeyCode.Space)) return;
+            if (!Input.GetKey(JumpKeyCode)) return;
             _jumpDirection = Vector3.up;
             chargeTime = Time.time;
             isCharging = true;
@@ -148,12 +157,14 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.CompareTag("Ground"))
+        if(isGround) return;
+
+        if (collision.collider.CompareTag("Ground"))
         {
             var normal = collision.contacts[0].normal;
             var s = 1 - Vector2.Dot(normal, Vector2.up);
             playerRigidbody.AddForce(normal * s * 3, ForceMode2D.Impulse);
-            Debug.Log(collision.contacts[0].normal * s * 3);
+            Debug.Log((collision.contacts[0].normal * s * 3).ToString());
         }
     }
 }
