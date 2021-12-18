@@ -70,7 +70,6 @@ public class Player : MonoBehaviour
         var velocityY = playerRigidbody.velocity.y;
         
         playerRigidbody.gravityScale = velocityY < 0 ? fallingGravityScale : defaultGravityScale;
-        playerRigidbody.sharedMaterial.bounciness = isGround && velocityY <= 0 ? 0 : playerBounciness;
 
     }
 
@@ -143,6 +142,17 @@ public class Player : MonoBehaviour
             _jumpDirection = Vector3.up;
             chargeTime = Time.time;
             isCharging = true;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.CompareTag("Ground"))
+        {
+            var normal = collision.contacts[0].normal;
+            var s = 1 - Vector2.Dot(normal, Vector2.up);
+            playerRigidbody.AddForce(normal * s * 3, ForceMode2D.Impulse);
+            Debug.Log(collision.contacts[0].normal * s * 3);
         }
     }
 }
