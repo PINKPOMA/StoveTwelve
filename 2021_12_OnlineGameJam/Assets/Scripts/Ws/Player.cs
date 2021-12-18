@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
+        var currentStatus = isGround;
         var velocityY = playerRigidbody.velocity.y;
         var layerMask = 1 << LayerMask.NameToLayer("Ground");  // Ground 레이어만 필터링 해옴
 
@@ -53,15 +54,20 @@ public class Player : MonoBehaviour
             var hitObj = Physics2D.Raycast(position, Vector2.down, groundCheckDistance, layerMask);
             Debug.DrawRay(position, Vector3.down * groundCheckDistance, Color.red);
             isGround = !(hitObj.collider is null) && velocityY == 0;
-            if (isGround) break;
+            if (isGround)
+            {
+                if (!currentStatus)
+                {
+                    SoundManager.Instance.PlaySFX("Fall");
+                }
+                break;
+            }
         }
     }
 
     private void SetPlayerPhysics()
     {
         var velocityY = playerRigidbody.velocity.y;
-        
-        
         
         playerRigidbody.gravityScale = velocityY < 0 ? fallingGravityScale : defaultGravityScale;
         playerRigidbody.sharedMaterial.bounciness = isGround && velocityY <= 0 ? 0 : playerBounciness;
@@ -128,6 +134,7 @@ public class Player : MonoBehaviour
             var chargeForce = pressTime > 2 ? 2 : pressTime;
             var power = animationCurve.Evaluate(chargeForce / 2.0f);
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
+            SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
         }
         else
