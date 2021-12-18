@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     private readonly Vector3 _rightDirection = new Vector3(0.5f, 1, 0);
     private readonly Vector3 _leftDirection = new Vector3(-0.5f, 1, 0);
     private Vector3 _jumpDirection;
-    
+
+    [SerializeField] private GameObject jumpParticle;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour
                 {
                     playerRigidbody.velocity = new Vector2(0, 0);
                     SoundManager.Instance.PlaySFX("Fall");
+                    
                     print("Fall Effect");
                 }
 
@@ -155,6 +157,7 @@ public class Player : MonoBehaviour
         if (isCharging)
         {
             if (!Input.GetKeyUp(JumpKeyCode)) return;
+            
             isCharging = false;
             var pressTime = Time.time - chargeTime;
             var chargeForce = pressTime > 2 ? 2 : pressTime;
@@ -162,7 +165,9 @@ public class Player : MonoBehaviour
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
+            // jumpParticle.Play();
             playerAnimator.SetTrigger("Jump");
+            jumpParticle.SetActive(true);
             OnJump?.Invoke(power);
         }
         else
@@ -202,5 +207,10 @@ public class Player : MonoBehaviour
     {
         Debug.Log("aa");
         startGroundY = transform.position.y;
+    }
+
+    public void EndJumpAnim()
+    {
+        // end
     }
 }
