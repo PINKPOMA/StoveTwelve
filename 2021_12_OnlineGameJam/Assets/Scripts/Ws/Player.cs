@@ -43,17 +43,25 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
-        var layerMask = 1 << LayerMask.NameToLayer("Ground");  // Player 레이어만 충돌 체크함
-        
+        var currentStatus = isGround;
+        var velocityY = playerRigidbody.velocity.y;
+        var layerMask = 1 << LayerMask.NameToLayer("Ground");  // Ground 레이어만 필터링 해옴
+
         for (var i = -1; i <= 1; i++)
         {
             var position = transform.position;
             position = new Vector3(position.x + i * (playerWidth / 2), position.y - playerHeight / 2, 0);
             var hitObj = Physics2D.Raycast(position, Vector2.down, groundCheckDistance, layerMask);
             Debug.DrawRay(position, Vector3.down * groundCheckDistance, Color.red);
-            isGround = !(hitObj.collider is null);
-            
-            if(isGround) break;
+            isGround = !(hitObj.collider is null) && velocityY == 0;
+            if (isGround)
+            {
+                if (!currentStatus)
+                {
+                    SoundManager.Instance.PlaySFX("Fall");
+                }
+                break;
+            }
         }
     }
 
@@ -63,6 +71,7 @@ public class Player : MonoBehaviour
         
         playerRigidbody.gravityScale = velocityY < 0 ? fallingGravityScale : defaultGravityScale;
         playerRigidbody.sharedMaterial.bounciness = isGround && velocityY <= 0 ? 0 : playerBounciness;
+
     }
 
     private void Move()
@@ -79,7 +88,7 @@ public class Player : MonoBehaviour
             if (!isCharging)
             {
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
-                playerSpriteRenderer.flipX = true;
+                playerSpriteRenderer.flipX = false;
                 return;
 
             }
@@ -90,7 +99,7 @@ public class Player : MonoBehaviour
             if (!isCharging)
             {
                 transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
-                playerSpriteRenderer.flipX = false;
+                playerSpriteRenderer.flipX = true;
                 return;
             }
             _jumpDirection = _rightDirection;
@@ -125,6 +134,7 @@ public class Player : MonoBehaviour
             var chargeForce = pressTime > 2 ? 2 : pressTime;
             var power = animationCurve.Evaluate(chargeForce / 2.0f);
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
+            SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
         }
         else
