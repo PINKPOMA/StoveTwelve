@@ -29,7 +29,9 @@ public class Player : MonoBehaviour
     [SerializeField] private bool isCharging;
     [SerializeField] private bool isGround;
 
-    
+    public PlayerGauge playerGauge;
+
+
     public event Action<float, float> OnGroundFall;
     public event Action<float> OnJump;
 
@@ -47,6 +49,10 @@ public class Player : MonoBehaviour
         CheckGround();
         SetPlayerPhysics();
         Jump();
+
+		if (Input.GetKey(KeyCode.Space)) {
+            ShowCharge();
+		}
     }
 
     private void FixedUpdate()
@@ -159,6 +165,7 @@ public class Player : MonoBehaviour
             var pressTime = Time.time - chargeTime;
             var chargeForce = pressTime > 2 ? 2 : pressTime;
             var power = animationCurve.Evaluate(chargeForce / 2.0f);
+            playerGauge.SetFill(power);
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
@@ -171,9 +178,16 @@ public class Player : MonoBehaviour
             _jumpDirection = playerSpriteRenderer.flipX ? _leftDirection : _rightDirection;
             chargeTime = Time.time;
             isCharging = true;
-
             playerAnimator.SetTrigger("Charging");
         }
+    }
+
+    void ShowCharge()
+	{
+        float pressTime = Time.time - chargeTime;
+        float chargeForce = pressTime > 2 ? 2 : pressTime;
+        float power = animationCurve.Evaluate(chargeForce / 2.0f);
+        playerGauge.SetFill(power);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
