@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,11 @@ public class Player : MonoBehaviour
     [SerializeField] private bool isGround;
 
     
+    public event Action<float, float> OnGroundFall;
+    public event Action<float> OnJump;
+
+    private float startGroundY;
+    private float endGroundY;
     private void Start()
     {
         isCharging = false;
@@ -155,6 +161,7 @@ public class Player : MonoBehaviour
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
             playerAnimator.SetTrigger("Jump");
+            OnJump?.Invoke(power);
         }
         else
         {
@@ -169,7 +176,12 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(isGround) return;
+        Debug.Log("a");
+        if (collision.collider.CompareTag("Ground"))
+        {
+            OnGroundFall?.Invoke(startGroundY, endGroundY);
+        }
+        if (isGround) return;
 
         if (collision.collider.CompareTag("Ground"))
         {
@@ -177,6 +189,16 @@ public class Player : MonoBehaviour
             var s = 1 - Vector2.Dot(normal, Vector2.up);
             playerRigidbody.AddForce(normal * s * 3, ForceMode2D.Impulse);
             Debug.Log((collision.contacts[0].normal * s * 3).ToString());
+
+
+            endGroundY = collision.contacts[0].point.y;
+
+            OnGroundFall?.Invoke(startGroundY, endGroundY);
         }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Debug.Log("aa");
+        startGroundY = transform.position.y;
     }
 }
