@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[ExecuteAlways]
 
 public class MapCamera : MonoBehaviour
 {
@@ -10,6 +11,6 @@ public class MapCamera : MonoBehaviour
 
     private void Update()
     {
-        camera.transform.position = new Vector3(0, Mathf.FloorToInt((target.position.y + y * 0.5f)/ y)*y, -10);
+        camera.transform.position = new Vector3(0, Mathf.FloorToInt((target.position.y + y * 0.5f) / y) * y, -10);
     }
 }
