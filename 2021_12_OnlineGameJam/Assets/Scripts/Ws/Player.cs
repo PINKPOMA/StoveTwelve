@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
     private readonly Vector3 _leftDirection = new Vector3(-0.5f, 1, 0);
     private Vector3 _jumpDirection;
     
+    [SerializeField] private Animator playerAnimator;
     [SerializeField] private AnimationCurve animationCurve;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private Rigidbody2D playerRigidbody;
@@ -28,6 +30,11 @@ public class Player : MonoBehaviour
     [SerializeField] private bool isGround;
 
     
+    public event Action<float, float> OnGroundFall;
+    public event Action<float> OnJump;
+
+    private float startGroundY;
+    private float endGroundY;
     private void Start()
     {
         isCharging = false;
@@ -93,6 +100,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKey(LeftKeyCode))
         {
+            playerAnimator.SetBool("Move", true);
             if (!isCharging)
             {
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
@@ -105,6 +113,7 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKey(RightKeyCode))
         {
+            playerAnimator.SetBool("Move", true);
             if (!isCharging)
             {
                 transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
@@ -113,6 +122,11 @@ public class Player : MonoBehaviour
                 return;
             }
             _jumpDirection = _rightDirection;
+        }
+        else
+        {
+
+            playerAnimator.SetBool("Move", false);
         }
     }
 
@@ -148,6 +162,8 @@ public class Player : MonoBehaviour
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
+            playerAnimator.SetTrigger("Jump");
+            OnJump?.Invoke(power);
         }
         else
         {
@@ -156,12 +172,19 @@ public class Player : MonoBehaviour
             chargeTime = Time.time;
             _jumpDirection = playerSpriteRenderer.flipX ? _leftDirection : _rightDirection;
             isCharging = true;
+
+            playerAnimator.SetTrigger("Charging");
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(isGround) return;
+        Debug.Log("a");
+        if (collision.collider.CompareTag("Ground"))
+        {
+            OnGroundFall?.Invoke(startGroundY, endGroundY);
+        }
+        if (isGround) return;
 
         if (collision.collider.CompareTag("Ground"))
         {
@@ -169,6 +192,16 @@ public class Player : MonoBehaviour
             var s = 1 - Vector2.Dot(normal, Vector2.up);
             playerRigidbody.AddForce(normal * s * 3, ForceMode2D.Impulse);
             Debug.Log((collision.contacts[0].normal * s * 3).ToString());
+
+
+            endGroundY = collision.contacts[0].point.y;
+
+            OnGroundFall?.Invoke(startGroundY, endGroundY);
         }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Debug.Log("aa");
+        startGroundY = transform.position.y;
     }
 }
