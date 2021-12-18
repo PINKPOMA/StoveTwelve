@@ -19,6 +19,7 @@ public class MapCamera : MonoBehaviour
 	[SerializeField] float[] _lv1CamMm;
 	[SerializeField] float[] _lv2CamMm;
 	[SerializeField] float[] _lv3CamMm;
+	[SerializeField] float[] _lv4CamMm;
 
 	float _gap = 60f;
 
@@ -42,6 +43,9 @@ public class MapCamera : MonoBehaviour
 		}
 		else if (_landY + _lvGap * 2<= ty && ty < _landY + _lvGap * 3) {
 			camera.transform.position = new Vector3(0, Mathf.Clamp(smooth.y, _lv3CamMm[0], _lv3CamMm[1]), -10);
+		}
+		else if (_landY + _lvGap * 3 <= ty && ty < 175f) {
+			camera.transform.position = new Vector3(0, Mathf.Clamp(smooth.y, _lv4CamMm[0], _lv4CamMm[1]), -10);
 		}
 	}
 }
