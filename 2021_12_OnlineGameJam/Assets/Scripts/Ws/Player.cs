@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
             {
                 if (!currentStatus)
                 {
+                    playerRigidbody.velocity = new Vector2(0, 0);
                     SoundManager.Instance.PlaySFX("Fall");
                     print("Fall Effect");
                 }
