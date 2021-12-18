@@ -45,8 +45,8 @@ public class SoundManager : MonoBehaviour
                 instance = gameObject.AddComponent<SoundManager>();
                 instance.bgmSource = gameObject.AddComponent<AudioSource>();
                 instance.sfxSource = gameObject.AddComponent<AudioSource>();
-                instance.bgmSource.volume = 0.5f;
-                instance.sfxSource.volume = 0.5f;
+                instance.bgmSource.volume = 0.25f;
+                instance.sfxSource.volume = 0.25f;
 
                 instance.bgmClips = Resources.LoadAll<AudioClip>(BGM_PATH).ToDictionary(p => p.name);
 #if UNITY_EDITOR
@@ -80,7 +80,9 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySFX(string key)
     {
-        sfxSource.PlayOneShot(sfxClips[key]);
+        if (sfxClips.ContainsKey(key) == true) {
+            sfxSource.PlayOneShot(sfxClips[key]);
+        }
     }
     public void SetBGMVolume(float value)
     {

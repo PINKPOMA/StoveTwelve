@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
     private void CheckGround()
     {
         var currentStatus = isGround;
-        var layerMask = 1 << LayerMask.NameToLayer("Ground"); // Player 레이어만 충돌 체크함
+        var layerMask = 1 << LayerMask.NameToLayer("Ground"); // Player ?�이?�만 충돌 체크??
         
         for (var i = -1; i <= 1; i++)
         {
@@ -135,17 +135,15 @@ public class Player : MonoBehaviour
         if (Input.GetKey(LeftKeyCode))
         {
             _jumpDirection = _leftDirection;
-            playerSpriteRenderer.flipX = true;
         }
         else if (Input.GetKey(RightKeyCode))
         {
             _jumpDirection = _rightDirection;
-            playerSpriteRenderer.flipX = false;
         }
-        // else
-        // {
-        //    _jumpDirection = Vector3.up;
-        // }
+        else
+        {
+            _jumpDirection = Vector3.up;
+        }
     }
     
     private void Jump()
@@ -170,7 +168,6 @@ public class Player : MonoBehaviour
             if (!Input.GetKey(JumpKeyCode)) return;
             _jumpDirection = Vector3.up;
             chargeTime = Time.time;
-            _jumpDirection = playerSpriteRenderer.flipX ? _leftDirection : _rightDirection;
             isCharging = true;
 
             playerAnimator.SetTrigger("Charging");
