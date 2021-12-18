@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float chargeTime;
     [SerializeField] private bool isCharging;
     [SerializeField] private bool isGround;
+    [SerializeField] private AnimationCurve animationCurve;
     
     private void Start()
     {
@@ -125,7 +126,9 @@ public class Player : MonoBehaviour
             isCharging = false;
             var pressTime = Time.time - chargeTime;
             var chargeForce = pressTime > 2 ? 2 : pressTime;
-            playerRigidbody.AddForce(_jumpDirection * jumpForce * chargeForce);
+            var power = animationCurve.Evaluate(chargeForce / 2.0f);
+            playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
+            Debug.Log($"Time : {pressTime}, Power: {power}");
         }
         else
         {
