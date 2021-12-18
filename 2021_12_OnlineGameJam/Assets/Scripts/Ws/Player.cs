@@ -6,14 +6,19 @@ using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
-    private const float GroundCheckDistance = 0.7f;
     private readonly Vector3 _rightDirection = new Vector3(0.5f, 1, 0);
     private readonly Vector3 _leftDirection = new Vector3(-0.5f, 1, 0);
     private Vector3 _jumpDirection;
     
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private Rigidbody2D playerRigidbody;
+    [SerializeField] private float playerBounciness = 0.1f;
+    [SerializeField] private float groundCheckDistance = 0.1f;
+    [SerializeField] private float defaultGravityScale = 1.5f;
+    [SerializeField] private float fallingGravityScale = 9.8f;
+
     [SerializeField] private float playerWidth;
+    [SerializeField] private float playerHeight;
     [SerializeField] private float jumpForce;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float chargeTime;
@@ -30,24 +35,36 @@ public class Player : MonoBehaviour
     private void Update()
     {
         CheckGround();
+        SetPlayerPhysics();
         Jump();
         Move();
     }
 
     private void CheckGround()
     {
+        var velocityY = playerRigidbody.velocity.y;
         var layerMask = 1 << LayerMask.NameToLayer("Ground");  // Ground 레이어만 필터링 해옴
 
         for (var i = -1; i <= 1; i++)
         {
             var position = transform.position;
-            var positionX = position.x + i * (playerWidth / 2);
-            position = new Vector3(positionX, position.y, 0);
-            var hitObj = Physics2D.Raycast(position, Vector2.down, GroundCheckDistance, layerMask);
-            Debug.DrawRay(position, Vector3.down * GroundCheckDistance, Color.red);
-            isGround = !(hitObj.collider is null);
+            position = new Vector3(position.x + i * (playerWidth / 2), position.y - playerHeight / 2, 0);
+            var hitObj = Physics2D.Raycast(position, Vector2.down, groundCheckDistance, layerMask);
+            Debug.DrawRay(position, Vector3.down * groundCheckDistance, Color.red);
+            isGround = !(hitObj.collider is null) && velocityY == 0;
             if (isGround) break;
         }
+    }
+
+    private void SetPlayerPhysics()
+    {
+        var velocityY = playerRigidbody.velocity.y;
+        
+        
+        
+        playerRigidbody.gravityScale = velocityY < 0 ? fallingGravityScale : defaultGravityScale;
+        playerRigidbody.sharedMaterial.bounciness = isGround && velocityY <= 0 ? 0 : playerBounciness;
+
     }
 
     private void Move()
@@ -112,7 +129,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (!Input.GetKeyDown(KeyCode.Space)) return;
+            if (!Input.GetKey(KeyCode.Space)) return;
             _jumpDirection = Vector3.up;
             chargeTime = Time.time;
             isCharging = true;
