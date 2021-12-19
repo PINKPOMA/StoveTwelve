@@ -6,12 +6,10 @@ using UnityEngine;
 public class SelectChar : MonoBehaviour
 {
     public Charactor charactor;
-    private Animator anim;
     private SpriteRenderer sr;
     public SelectChar[] chars;
     private void Start()
     {
-        anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         if(dataManager.instance.CurrentCharactor == charactor)
             OnSelect();
@@ -32,12 +30,10 @@ public class SelectChar : MonoBehaviour
 
     void OnDeSelect()
     {
-        anim.SetBool("Move", false);
         sr.color = new Color(0.5f, 0.5f, 0.5f);
     }
     void OnSelect()
     {
-        anim.SetBool("Move", true);
         sr.color = new Color(1f, 1f, 1f);
     }
 }
