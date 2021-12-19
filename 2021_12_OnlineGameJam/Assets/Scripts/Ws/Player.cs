@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     private const KeyCode LeftKeyCode = KeyCode.A;
     private const KeyCode RightKeyCode = KeyCode.D;
+    private const KeyCode FixKeyCode = KeyCode.F;
     private const KeyCode JumpKeyCode = KeyCode.Space;
     private readonly Vector3 _rightDirection = new Vector3(0.5f, 1, 0);
     private readonly Vector3 _leftDirection = new Vector3(-0.5f, 1, 0);
@@ -52,10 +53,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        FixJump();
         CheckGround();
         SetPlayerPhysics();
         Jump();
-
 		if (Input.GetKey(KeyCode.Space)) {
             ShowCharge();
 		}
@@ -105,7 +106,11 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        if (!isGround) return;
+        if (!isGround)
+        {
+            isCharging = false;
+            return;
+        }
         
         if (isCharging)
         {
@@ -224,8 +229,11 @@ public class Player : MonoBehaviour
         startGroundY = transform.position.y;
     }
 
-    public void EndJumpAnim()
+    public void FixJump()
     {
-        // end
+        if (Input.GetKey(FixKeyCode))
+        {
+            transform.Translate(new Vector3(0, 0.1f, 0));
+        }
     }
 }
