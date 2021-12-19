@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
         else
         {
             if (!Input.GetKey(JumpKeyCode)) return;
-            _jumpDirection = playerSpriteRenderer.flipX ? _rightDirection : _leftDirection;
+            _jumpDirection = playerSpriteRenderer.flipX ? _leftDirection : _rightDirection;
             chargeTime = Time.time;
             isCharging = true;
             playerAnimator.SetTrigger("Charging");
