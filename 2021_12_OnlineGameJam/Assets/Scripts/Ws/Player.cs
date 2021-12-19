@@ -214,6 +214,12 @@ public class Player : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             endGroundY = collision.contacts[0].point.y;
+
+            if (Mathf.CeilToInt(startGroundY - endGroundY) > 10)
+            {
+                Debug.Log("Fall");
+                playerAnimator.SetTrigger("Fall");
+            }
             OnGroundFall?.Invoke(startGroundY, endGroundY);
         }
         if (isGround) return;
@@ -231,7 +237,6 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("aa");
         startGroundY = transform.position.y;
     }
 
