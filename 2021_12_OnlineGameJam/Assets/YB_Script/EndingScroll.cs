@@ -11,8 +11,15 @@ public class EndingScroll : MonoBehaviour
         Vector3 pos = transform.position;
 
         Vector3 localVectorUp = transform.TransformDirection(0, 1, 0);
-
-        pos += localVectorUp * ScrollSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.Space))
+        {
+            pos += localVectorUp * (ScrollSpeed * 3)*Time.deltaTime;
+        }
+        else
+        {
+            pos += localVectorUp * ScrollSpeed * Time.deltaTime;
+        }
+        
         
         transform.position = pos;
         
