@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
             {
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
                 // playerRigidbody.velocity = new Vector2(-moveSpeed, playerRigidbody.velocity.y);
-                playerSpriteRenderer.flipX = true;
+                playerSpriteRenderer.flipX = false;
                 return;
 
             }
@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
             {
                 transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
                 // playerRigidbody.velocity = new Vector2(moveSpeed, playerRigidbody.velocity.y);
-                playerSpriteRenderer.flipX = false;
+                playerSpriteRenderer.flipX = true;
                 return;
             }
             _jumpDirection = _rightDirection;
@@ -149,12 +149,12 @@ public class Player : MonoBehaviour
         if (Input.GetKey(LeftKeyCode))
         {
             _jumpDirection = _leftDirection;
-            playerSpriteRenderer.flipX = true;
+            playerSpriteRenderer.flipX = false;
         }
         else if (Input.GetKey(RightKeyCode))
         {
             _jumpDirection = _rightDirection;
-            playerSpriteRenderer.flipX = false;
+            playerSpriteRenderer.flipX = true;
         }
         // else
         // {

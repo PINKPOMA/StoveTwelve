@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 6aa6961226564d04999be11ee7e2cba7
   - enabled: 1
+    path: Assets/Scenes/SelectPlr.unity
+    guid: 13ff1cb4f9bd4cc45a149e831733f76a
+  - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 82f43ab8488affb48a95765d79a435fa
   - enabled: 1

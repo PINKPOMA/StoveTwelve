@@ -24,4 +24,6 @@ public class Singleton : MonoBehaviour
             return instance;
         }
     }
+
+    public int PlayerNumber { get; internal set; }
 }
