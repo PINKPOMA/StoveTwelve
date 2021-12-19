@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public float startTime;
     public TMPro.TextMeshProUGUI timerText;
     public GameObject gauge;
-
+    public Transform[] spawns;
     private void Awake()
     {
         image.DOFade(0, 2.5f).SetDelay(1.5f).From(1);
@@ -42,7 +42,19 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Title");
         }
-        if(Singleton.Instance.GameType == GameType.SuperEasy)
+        if(Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            player.transform.position = spawns[0].position;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            player.transform.position = spawns[1].position;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            player.transform.position = spawns[2].position;
+        }
+        if (Singleton.Instance.GameType == GameType.SuperEasy)
         {
             Save();
         }
@@ -117,8 +129,8 @@ public class GameManager : MonoBehaviour
         Debug.Log(PlayerPrefs.GetInt("Clear", 0)); ;
 
         var seq = DOTween.Sequence().SetUpdate(true);
-        seq.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0, 1.5f).SetEase(Ease.OutExpo).SetUpdate(true));
-        seq.Append(image.DOFade(1, 2.5f).SetDelay(1.5f).From(0));
+        seq.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0, 0.5f).SetEase(Ease.OutExpo).SetUpdate(true));
+        seq.Append(image.DOFade(1, 1.5f).From(0));
         seq.OnComplete(() => { Time.timeScale = 1; SceneManager.LoadScene("Credit"); });
 
 
