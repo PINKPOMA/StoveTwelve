@@ -16,9 +16,9 @@ public class ChallengeView : MonoBehaviour
         AddItem(new JumpChallenge() { Name = "떡상 가즈아", MaxValue = 500 });
 
         AddItem(new MaxFallChallenge() { Name = "최초 다이빙", MaxValue = 10 });
-        AddItem(new MaxFallChallenge() { Name = "떡락 가즈아", MaxValue = 100 });
-        AddItem(new MaxFallChallenge() { Name = "태초마을 단골", MaxValue = 300 });
-        AddItem(new MaxFallChallenge() { Name = "치료가 필요할 정도로 심각한 태초마을 단골입니다.", MaxValue = 500 });
+        AddItem(new MaxFallChallenge() { Name = "떡락 가즈아", MaxValue = 20 });
+        AddItem(new MaxFallChallenge() { Name = "태초마을 손님", MaxValue = 30 });
+        AddItem(new MaxFallChallenge() { Name = "치료가 필요할 정도로 심각한 태초마을 중독입니다.", MaxValue = 40 });
 
         AddItem(new BoundChallenge() { Name = "바운스 바운스", MaxValue = 1 });
         AddItem(new BoundChallenge() { Name = "퀘스트1", MaxValue = 25 });
@@ -26,10 +26,10 @@ public class ChallengeView : MonoBehaviour
         AddItem(new BoundChallenge() { Name = "퀘스트3", MaxValue = 250 });
 
 
-        AddItem(new ClearTimeChallenge() { Name = "퀘스트1", MaxValue = 250 });
-        AddItem(new ClearTimeChallenge() { Name = "퀘스트2", MaxValue = 250 });
-        AddItem(new ClearTimeChallenge() { Name = "퀘스트3", MaxValue = 250 });
-        AddItem(new ClearTimeChallenge() { Name = "퀘스트4", MaxValue = 250 });
+        AddItem(new ClearTimeChallenge() { Name = "시간을 달리는 스토브 게임잼", MaxValue = 120 });
+        AddItem(new ClearTimeChallenge() { Name = "퀘스트2", MaxValue = 180 });
+        AddItem(new ClearTimeChallenge() { Name = "퀘스트3", MaxValue = 240 });
+        AddItem(new ClearTimeChallenge() { Name = "퀘스트4", MaxValue = 300 });
 
     }
 
@@ -47,7 +47,10 @@ public abstract class Challenge
     public string Name { get; set; }
     public int MaxValue { get; set; }
     public virtual int Value { get; set; }
-    public virtual bool IsClear { get; }
+    public virtual bool IsClear
+    {
+        get => MaxValue <= Value;
+    }
 
     public abstract string GetText();
 
@@ -58,11 +61,6 @@ public class JumpChallenge : Challenge
     public JumpChallenge()
     {
         Value = PlayerPrefs.GetInt("Jump",0);
-    }
-
-    public override bool IsClear
-    {
-        get => MaxValue <= Value;
     }
 
     public override string GetText()
@@ -76,6 +74,7 @@ public class MaxFallChallenge : Challenge
     public MaxFallChallenge()
     {
         Value = PlayerPrefs.GetInt("MaxFall",0);
+        Debug.Log(Value);
     }
 
 
@@ -102,6 +101,11 @@ public class BoundChallenge : Challenge
 
 public class ClearTimeChallenge : Challenge
 {
+    public override bool IsClear
+    {
+        get => MaxValue >= Value;
+    }
+
     public ClearTimeChallenge()
     {
         Value = PlayerPrefs.GetInt("ClearMinTime", 0);

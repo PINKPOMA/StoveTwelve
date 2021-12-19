@@ -26,7 +26,7 @@ public class MainTitlePresenter : MonoBehaviour
     public void OnStart(int type)
     {
         Singleton.Instance.GameType = (GameType)type;
-        image.DOFade(1, 1).From(0).OnComplete(() => SceneManager.LoadScene("Game"));
+        image.DOFade(1, 1).From(0).OnComplete(() => SceneManager.LoadScene("SelectPlr"));
     }
 
 }

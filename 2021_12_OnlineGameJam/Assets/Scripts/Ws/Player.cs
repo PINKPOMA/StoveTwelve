@@ -41,9 +41,16 @@ public class Player : MonoBehaviour
 
     public event Action<float, float> OnGroundFall;
     public event Action<float> OnJump;
+    public event Action OnBouns;
 
     private float startGroundY;
     private float endGroundY;
+    public RuntimeAnimatorController[] animatorControllers;
+    private void Awake()
+    {
+        playerAnimator.runtimeAnimatorController = animatorControllers[Singleton.Instance.PlayerNumber];
+    }
+
     private void Start()
     {
         isCharging = false;
@@ -161,10 +168,6 @@ public class Player : MonoBehaviour
             _jumpDirection = _rightDirection;
             playerSpriteRenderer.flipX = true;
         }
-        // else
-        // {
-        //    _jumpDirection = Vector3.up;
-        // }
     }
     
     private void Jump()
@@ -183,7 +186,6 @@ public class Player : MonoBehaviour
             playerRigidbody.AddForce(_jumpDirection * jumpForce * power * 2);
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
-            // jumpParticle.Play();
             playerAnimator.SetTrigger("Jump");
             jumpParticle.SetActive(true);
             OnJump?.Invoke(power);
@@ -221,6 +223,10 @@ public class Player : MonoBehaviour
             var normal = collision.contacts[0].normal;
             var s = 1 - Vector2.Dot(normal, Vector2.up);
             playerRigidbody.AddForce(normal * s * 3, ForceMode2D.Impulse);
+            if(Vector2.Dot(normal,Vector2.up) < 0.5f)
+            {
+                OnBouns?.Invoke();
+            }
         }
     }
     private void OnCollisionExit2D(Collision2D collision)

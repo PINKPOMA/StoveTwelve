@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        image.DOFade(0, 2.5f).SetDelay(1.5f).From(1);
         startTime = Time.deltaTime;
         if (Singleton.Instance.GameType == GameType.Easy || Singleton.Instance.GameType == GameType.SuperEasy)
         {
@@ -31,7 +32,10 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.PlayBGM("Game");
         player.OnJump += Player_OnJump; ;
         player.OnGroundFall += Player_OnGroundFall;
+        player.OnBouns += Player_OnBouns; ;
     }
+
+
     private void Update()
     {
         if(Singleton.Instance.GameType == GameType.SuperEasy)
@@ -72,6 +76,13 @@ public class GameManager : MonoBehaviour
         }
         PlayerPrefs.SetInt("Jump", jump + 1);
         Debug.Log(PlayerPrefs.GetInt("Jump", 0));
+    }
+
+
+    private void Player_OnBouns()
+    {
+        PlayerPrefs.SetInt("Bound", PlayerPrefs.GetInt("Bound", 0) + 1);
+        Debug.Log($"Bounds : {PlayerPrefs.GetInt("Bound", 0)}");
     }
     public GameObject text1;
     private void Player_OnGroundFall(float start, float end)
