@@ -29,7 +29,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float chargeTime;
     [SerializeField] private bool isCharging;
     [SerializeField] private bool isGround;
-
+    public bool IsGround
+    {
+        get => isGround;
+    }
     public PlayerGauge playerGauge;
 
     public float maxPressTime = 1f;
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour
     {
         Move();
     }
+
 
     private void CheckGround()
     {
@@ -202,6 +206,7 @@ public class Player : MonoBehaviour
         Debug.Log("a");
         if (collision.collider.CompareTag("Ground"))
         {
+            endGroundY = collision.contacts[0].point.y;
             OnGroundFall?.Invoke(startGroundY, endGroundY);
         }
         if (isGround) return;
@@ -211,12 +216,6 @@ public class Player : MonoBehaviour
             var normal = collision.contacts[0].normal;
             var s = 1 - Vector2.Dot(normal, Vector2.up);
             playerRigidbody.AddForce(normal * s * 3, ForceMode2D.Impulse);
-            Debug.Log((collision.contacts[0].normal * s * 3).ToString());
-
-
-            endGroundY = collision.contacts[0].point.y;
-
-            OnGroundFall?.Invoke(startGroundY, endGroundY);
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
