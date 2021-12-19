@@ -187,7 +187,8 @@ public class Player : MonoBehaviour
             if(chargeForce >= 0.3f) SoundManager.Instance.PlaySFX("Jump");
             Debug.Log($"Time : {pressTime}, Power: {power}");
             playerAnimator.SetTrigger("Jump");
-            jumpParticle.SetActive(true);
+            Destroy(Instantiate(jumpParticle, transform.position, Quaternion.identity), 1);
+
             OnJump?.Invoke(power);
         }
         else
