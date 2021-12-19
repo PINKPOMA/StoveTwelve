@@ -48065,6 +48065,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7262814925690808992, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
+      propertyPath: jumpParticle
+      value: 
+      objectReference: {fileID: 6890267321761216241, guid: 31acc1db25325ba4e87c289dc66125e8, type: 3}
+    - target: {fileID: 7262814925690808992, guid: 734dd08885b24884c82cb01ebece1d9b, type: 3}
       propertyPath: defaultGravityScale
       value: 2
       objectReference: {fileID: 0}
