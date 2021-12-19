@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Title");
+        }
         if(Singleton.Instance.GameType == GameType.SuperEasy)
         {
             Save();
