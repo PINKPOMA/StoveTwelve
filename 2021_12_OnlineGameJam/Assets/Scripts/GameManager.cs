@@ -42,15 +42,15 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Title");
         }
-        if(Input.GetKeyDown(KeyCode.Keypad7))
+        if(Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7))
         {
             player.transform.position = spawns[0].position;
         }
-        if (Input.GetKeyDown(KeyCode.Keypad8))
+        if (Input.GetKeyDown(KeyCode.Keypad8) || Input.GetKeyDown(KeyCode.Alpha8))
         {
             player.transform.position = spawns[1].position;
         }
-        if (Input.GetKeyDown(KeyCode.Keypad9))
+        if (Input.GetKeyDown(KeyCode.Keypad9) || Input.GetKeyDown(KeyCode.Alpha9))
         {
             player.transform.position = spawns[2].position;
         }
